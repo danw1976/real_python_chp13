@@ -1,0 +1,17 @@
+import sqlite3
+
+people_values = (('Jean-Baptiste Zorg', 'Human', 122),
+		('Korben Dallas', 'Meat Popsicle', 100),
+		("Ak'not", 'Mangalore', -5))
+
+with sqlite3.connect('Roster.db') as connection:
+	c = connection.cursor()
+	c.execute("DROP TABLE IF EXISTS Beings")
+	c.execute("CREATE TABLE Beings(Name TEXT, Species TEXT, IQ INT)")
+	c.executemany("INSERT INTO Beings VALUES(?, ?, ?)", people_values)
+	c.execute("UPDATE Beings SET Species=? WHERE Name=? AND IQ=?",
+		('Human', 'Korben Dallas', 100))
+	for row in c.fetchall():
+		print(row)
+
+
